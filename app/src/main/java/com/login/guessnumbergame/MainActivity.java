@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText etGuessNumber;
+    EditText etGuessNumber, etGuessNumber2;
 
     TextView txtGuessNumber;
 
@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         etGuessNumber = findViewById(R.id.etGuessNumber);
+        etGuessNumber2 = findViewById(R.id.etGuessNumber2);
         txtGuessNumber = findViewById(R.id.txtGuessNumber);
         btnGuess = findViewById(R.id.btnGuess);
         btnHelpMe = findViewById(R.id.btnHelpMe);
@@ -58,20 +59,34 @@ public class MainActivity extends AppCompatActivity {
 
     private void generateRandomNumber() {
         Random random = new Random();
-        randomNumber = random.nextInt(100) + 1;
+        randomNumber = random.nextInt(1001);
     }
 
     private void checkGuess() {
-        String guessText = etGuessNumber.getText().toString();
-        if(!guessText.isEmpty()) {
-            int guessNumber = Integer.parseInt(guessText);
-            if(guessNumber == randomNumber) {
-                txtGuessNumber.setText("Bạn đã chiến thắng!");
-            } else if (guessNumber < randomNumber) {
-                txtGuessNumber.setText("Bạn hãy nhập số lớn hơn.");
-            } else {
-                txtGuessNumber.setText("Bạn hãy nhập số nhỏ hơn.");
-            }
+        String guessText1 = etGuessNumber.getText().toString();
+        String guessText2 = etGuessNumber2.getText().toString();
+
+        if (guessText1.isEmpty() || guessText2.isEmpty()) {
+            txtGuessNumber.setText("Hãy nhập cả hai số đoán.");
+            return; // Kết thúc hàm
+        }
+
+        int guessNumber1 = Integer.parseInt(guessText1);
+        int guessNumber2 = Integer.parseInt(guessText2);
+
+        if (guessNumber1 > 1000 || guessNumber2 > 1000) {
+            txtGuessNumber.setText("Hãy nhập số từ 0 - 1000.");
+            return; // Kết thúc hàm
+        }
+
+        if (guessNumber1 == randomNumber && guessNumber2 == randomNumber) {
+            txtGuessNumber.setText("Cả hai người chơi đã chiến thắng!");
+        } else if (guessNumber1 == randomNumber) {
+            txtGuessNumber.setText("Người chơi 1 đã chiến thắng!");
+        } else if (guessNumber2 == randomNumber) {
+            txtGuessNumber.setText("Người chơi 2 đã chiến thắng!");
+        } else {
+            txtGuessNumber.setText("Cả hai người chơi chưa đoán đúng.");
         }
     }
 
@@ -81,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void resetGame() {
         etGuessNumber.setText("");
+        etGuessNumber2.setText("");
         txtGuessNumber.setText("");
         generateRandomNumber();
     }
